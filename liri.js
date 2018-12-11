@@ -17,9 +17,10 @@ For axios (ajax requests):
 
 
 */
+require('dotenv').config();
 
-
-require("dotenv").config();
+const Spotify = require('node-spotify-api');
+const request = require('request');
 const axios = require('axios');
 const fs = require('fs');
 const keys = require('./keys');
@@ -39,7 +40,7 @@ let userFun = process.argv[2];
 // let userIn = process.argv[3];
 
 if (userFun === 'concert-this') {
-
+    concert_this();
 } else if (userFun === 'spotify-this-song') {
 
 } else if (userFun === 'movie-this') {
