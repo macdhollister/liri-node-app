@@ -11,19 +11,18 @@ let userFun = process.argv[2];
 // let userIn = process.argv[3];
 
 if (userFun === 'concert-this') {
-    concert_this();
+    concert_this(process.argv[3]);
 } else if (userFun === 'spotify-this-song') {
-    spotify_this_song();
+    spotify_this_song(process.argv[3]);
 } else if (userFun === 'movie-this') {
-    movie_this();
+    movie_this(process.argv[3]);
 } else if (userFun === 'do-what-it-says') {
-
+    do_what_it_says();
 } else {
     // Asks user to use one of the allowed functions
 }
 
-function concert_this() {
-    let artist = process.argv[3];
+function concert_this(artist) {
     request('https://rest.bandsintown.com/artists/' + artist + '/events?app_id=codingbootcamp', function(error, response, body) {
         if (error) {
             console.log(error);
@@ -40,10 +39,8 @@ function concert_this() {
     })
 }
 
-function spotify_this_song() {
-    let song = process.argv[3];
-
-    spotify.search({type: 'track', query: song ? song : 'The Sign'}, function(err, data) {
+function spotify_this_song(song) {
+    spotify.search({type: 'track', query: song ? song : 'The Sign Ace of Base'}, function(err, data) {
         if (err) {
             return console.log('Error Occurred: ' + err);
         }
@@ -68,8 +65,7 @@ function spotify_this_song() {
     })
 }
 
-function movie_this() {
-    let movie = process.argv[3];
+function movie_this(movie) {
     if (movie) for (let i = 0; i < movie.length; i++) {
         if (movie[i] === ' ') movie[i] = '_';
     }
@@ -91,15 +87,21 @@ function movie_this() {
     )
 }
 
-/* node liri.js do-what-it-says
-
-Uses 'fs' node package, takes text from random.txt and uses it to call a LIRI command
-
--- edit random.txt to test for movie-this and concert-this
-
-*/
 function do_what_it_says() {
+    fs.readFile('random.txt', 'utf8', (err, data) => {
+        if (err) throw (err);
+        data = data.split(',');
+        let toCall = data[0];
+        let input = data[1];
 
+        if (toCall === 'concert-this') {
+            concert_this(input);
+        } else if (toCall === 'spotify-this-song') {
+            spotify_this_song(input);
+        } else if (toCall === 'movie-this') {
+            movie_this(input);
+        }
+    })
 }
 
 /* BONUS
@@ -107,40 +109,3 @@ Log everything to both Terminal and log.txt
 Append each command
 Don't overwrite the file each time a command is run
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
