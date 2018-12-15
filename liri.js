@@ -7,16 +7,6 @@ const fs = require('fs');
 const keys = require('./keys');
 const spotify = new Spotify(keys.spotify);
 
-
-/* Needs to take the following commands:
-
-concert-this
-spotify-this-song
-movie-this
-do-what-it-says
-
-*/
-
 let userFun = process.argv[2];
 // let userIn = process.argv[3];
 
@@ -50,16 +40,6 @@ function concert_this() {
     })
 }
 
-/* node liri.js spotify-this-song '<song name here>'
-
-Shows in Terminal:
-    * Artist(s)
-    * Song's name
-    * Preview link of the song from Spotify
-    * Album that the song is on
-
-Defaults to 'The Sign' by Ace of Base if no song is given
-*/
 function spotify_this_song() {
     let song = process.argv[3];
 
@@ -88,28 +68,12 @@ function spotify_this_song() {
     })
 }
 
-/* node liri.js movie-this '<movie name here>'
-
-Shows in Terminal:
-    * Title of the movie.
-    * Year the movie came out.
-    * IMDB Rating of the movie.
-    * Rotten Tomatoes Rating of the movie.
-    * Country where the movie was produced.
-    * Language of the movie.
-    * Plot of the movie.
-    * Actors in the movie.
-
-Defaults to "Mr. Nobody" if no movie is given
-use 'trilogy' API Key
-*/
-
 function movie_this() {
     let movie = process.argv[3];
-    for (let i = 0; i < movie.length; i++) {
+    if (movie) for (let i = 0; i < movie.length; i++) {
         if (movie[i] === ' ') movie[i] = '_';
     }
-    axios.get(`http://www.omdbapi.com/?t=${movie}&apikey=trilogy`).then(
+    axios.get(`http://www.omdbapi.com/?t=${movie ? movie : 'Mr._Nobody'}&apikey=trilogy`).then(
         function(response) {
             let data = response.data;
             let ratings = data.Ratings;
