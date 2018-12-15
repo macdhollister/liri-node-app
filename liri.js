@@ -1,22 +1,3 @@
-/*
-For axios (ajax requests):
-
-
-    // Basic Node application for requesting data from the OMDB website via axios
-    // Here we incorporate the "axios" npm package
-    var axios = require("axios");
-
-    // We then run the request with axios module on a URL with a JSON
-    axios.get("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy").then(
-    function(response) {
-        // Then we print out the imdbRating
-        console.log("The movie's rating is: " + response.data.imdbRating);
-    }
-    );
-
-
-
-*/
 require('dotenv').config();
 
 const Spotify = require('node-spotify-api');
@@ -42,39 +23,31 @@ let userFun = process.argv[2];
 if (userFun === 'concert-this') {
     concert_this();
 } else if (userFun === 'spotify-this-song') {
-
+    spotify_this_song();
 } else if (userFun === 'movie-this') {
-    
+    movie_this();
 } else if (userFun === 'do-what-it-says') {
 
 } else {
     // Asks user to use one of the allowed functions
 }
 
-
-/* node liri.js concert-this '<artist/band name here>'
-
-Searches Bands in Town Artist Events API
-"https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
-
-Shows in Terminal:
-    * Name of Venue
-    * Venue Location
-    * Date of Event (using Moment to format as MM/DD/YYYY)
-
-*/
 function concert_this() {
     let artist = process.argv[3];
+    request('https://rest.bandsintown.com/artists/' + artist + '/events?app_id=codingbootcamp', function(error, response, body) {
+        if (error) {
+            console.log(error);
+        }
 
-    axios.get('https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp')
-    .then(data => {
-        data = data[0];
-        console.log('Venue: ' + data.datetime);
+        let data = JSON.parse(body);
+        console.log('----------------------------------')
+        for (let i = 0; i < data.length; i++) {
+            console.log(`Venue Name: ${data[i].venue.name}`);
+            console.log(`Venue Location: ${data[i].venue.city}, ${data[i].venue.region}`);
+            console.log(`Date: ${data[i].datetime}`);
+            console.log('----------------------------------')
+        }
     })
-    // response[0].datetime --> '2017-03-19T11:00:00'
-    // response[0].venue.name --> venue name string
-    // response[0].venue.city --> city name string
-    // response[0].venue.region --> state name string
 }
 
 /* node liri.js spotify-this-song '<song name here>'
@@ -88,7 +61,31 @@ Shows in Terminal:
 Defaults to 'The Sign' by Ace of Base if no song is given
 */
 function spotify_this_song() {
+    let song = process.argv[3];
 
+    spotify.search({type: 'track', query: song ? song : 'The Sign'}, function(err, data) {
+        if (err) {
+            return console.log('Error Occurred: ' + err);
+        }
+
+        console.log('-----------------------------------');
+        for(let i = 0; i < data.tracks.items.length; i++) {
+            let song = data.tracks.items[i];
+            // Artist Name
+            if (song.artists[0].name) console.log('Artist: ' + song.artists[0].name);
+
+            // Song Title
+            if (song.name) console.log('Track Title: ' + song.name);
+
+            // Album Name
+            if (song.album.name) console.log('Album: ' + song.album.name);
+
+            // Preview URL
+            if (song.preview_url) console.log('Preview of the song: ' + song.preview_url);
+
+            console.log('-----------------------------------');
+        }
+    })
 }
 
 /* node liri.js movie-this '<movie name here>'
@@ -106,8 +103,28 @@ Shows in Terminal:
 Defaults to "Mr. Nobody" if no movie is given
 use 'trilogy' API Key
 */
-function movie_this() {
 
+function movie_this() {
+    let movie = process.argv[3];
+    for (let i = 0; i < movie.length; i++) {
+        if (movie[i] === ' ') movie[i] = '_';
+    }
+    axios.get(`http://www.omdbapi.com/?t=${movie}&apikey=trilogy`).then(
+        function(response) {
+            let data = response.data;
+            let ratings = data.Ratings;
+            console.log(`Movie Title: ${data.Title}`);
+            console.log(`Release Date: ${data.Released}`);
+            console.log('Ratings:');
+            for (let rating of ratings) {
+                console.log(`\t${rating.Source}: ${rating.Value}`);
+            }
+            console.log(`Country of Production: ${data.Country}`);
+            console.log(`Language(s): ${data.Language}`);
+            console.log(`Plot: ${data.Plot}`);
+            console.log(`Main Cast: ${data.Actors}`);
+        }
+    )
 }
 
 /* node liri.js do-what-it-says
