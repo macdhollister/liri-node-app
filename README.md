@@ -57,7 +57,8 @@ Returns:
 ![movie-this example](/images/movie-this.PNG)
  
 ## do-what-it-says 
-do-what-it-says reads the "random.txt" file and executes one of the above commands based on the contents. The file contents must be in the format as follows: 
+do-what-it-says reads the "random.txt" file and executes one of the above commands based on the contents. The file contents must be in the format as follows:  
+
 'command-name','user-input'
 
 ![do-what-it-says example](/images/do-what-it-says.PNG)
