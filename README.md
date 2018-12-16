@@ -16,7 +16,7 @@ The first three of these also require a user input immediately after the command
 Concert-this searches for upcoming performances from an music artist/band
 
 Takes: 
-* Artist / Band name 
+* Artist / Band name (in quotes)
  
 Returns: 
 * Name of venue
@@ -24,3 +24,40 @@ Returns:
 * Date of Event (in MM/DD/YYYY format) 
  
 ![concert-this example](/images/concert-this.PNG) 
+ 
+## spotify-this-song 
+Spotify-this-song searches Spotify for a user's search query 
+ 
+Takes:
+* A search query (in quotes) 
+ 
+Returns:
+* Artist(s) 
+* The song's name 
+* The album name that the song is on 
+* A preview link of the song (if available)
+ 
+![spotify-this-song example](/images/spotify-this-song.PNG)
+
+## movie-this
+Movie-this gives the user information about a movie 
+ 
+Takes: 
+* Movie title 
+ 
+Returns:
+* Movie Title 
+* Release Date
+* Ratings 
+* Country of Production 
+* Language(s)
+* Plot summary 
+* Main cast 
+
+![movie-this example](/images/movie-this.PNG)
+ 
+## do-what-it-says 
+do-what-it-says reads the "random.txt" file and executes one of the above commands based on the contents. The file contents must be in the format as follows: 
+'command-name','user-input'
+
+![do-what-it-says example](/images/do-what-it-says.PNG)
