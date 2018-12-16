@@ -1,0 +1,12 @@
+-----------------------------------
+Movie Title: Labyrinth
+Release Date: 27 Jun 1986
+Ratings:
+	Internet Movie Database: 7.4/10
+	Rotten Tomatoes: 69%
+	Metacritic: 50/100
+Country of Production: UK, USA
+Language(s): English
+Plot: A 16-year-old girl is given 13 hours to solve a labyrinth and rescue her baby brother when her wish for him to be taken away is granted by the Goblin King.
+Main Cast: David Bowie, Jennifer Connelly, Toby Froud, Shelley Thompson
+-----------------------------------

@@ -6,6 +6,7 @@ const axios = require('axios');
 const fs = require('fs');
 const keys = require('./keys');
 const spotify = new Spotify(keys.spotify);
+const moment = require('moment');
 
 let userFun = process.argv[2];
 // let userIn = process.argv[3];
@@ -29,12 +30,13 @@ function concert_this(artist) {
         }
 
         let data = JSON.parse(body);
-        console.log('----------------------------------')
+        liriLog('----------------------------------')
+
         for (let i = 0; i < data.length; i++) {
-            console.log(`Venue Name: ${data[i].venue.name}`);
-            console.log(`Venue Location: ${data[i].venue.city}, ${data[i].venue.region}`);
-            console.log(`Date: ${data[i].datetime}`);
-            console.log('----------------------------------')
+            liriLog(`Venue Name: ${data[i].venue.name}\r\n`
+                    + `Venue Location: ${data[i].venue.city}, ${data[i].venue.region}\r\n`
+                    + `Date: ${moment(data[i].datetime).format("MM/DD/YYYY")}\r\n`
+                    + '----------------------------------');
         }
     })
 }
@@ -45,22 +47,18 @@ function spotify_this_song(song) {
             return console.log('Error Occurred: ' + err);
         }
 
-        console.log('-----------------------------------');
+        liriLog('-----------------------------------');
         for(let i = 0; i < data.tracks.items.length; i++) {
             let song = data.tracks.items[i];
-            // Artist Name
-            if (song.artists[0].name) console.log('Artist: ' + song.artists[0].name);
+            let toLog = '';
 
-            // Song Title
-            if (song.name) console.log('Track Title: ' + song.name);
+            if (song.artists[0].name) toLog += `Artist: ${song.artists[0].name}\r\n`;
+            if (song.name) toLog += `Track Title: ${song.name}\r\n`;
+            if (song.album.name) toLog += `Album: ${song.album.name}\r\n`;
+            if (song.preview_url) toLog += `Preview of the song: ${song.preview_url}\r\n`;
+            toLog += '-----------------------------------';
 
-            // Album Name
-            if (song.album.name) console.log('Album: ' + song.album.name);
-
-            // Preview URL
-            if (song.preview_url) console.log('Preview of the song: ' + song.preview_url);
-
-            console.log('-----------------------------------');
+            liriLog(toLog);
         }
     })
 }
@@ -73,16 +71,21 @@ function movie_this(movie) {
         function(response) {
             let data = response.data;
             let ratings = data.Ratings;
-            console.log(`Movie Title: ${data.Title}`);
-            console.log(`Release Date: ${data.Released}`);
-            console.log('Ratings:');
+            let toLog = '-----------------------------------\r\n';
+
+            toLog += `Movie Title: ${data.Title}\r\n`;
+            toLog += `Release Date: ${data.Released}\r\n`;
+            toLog += 'Ratings:\r\n';
             for (let rating of ratings) {
-                console.log(`\t${rating.Source}: ${rating.Value}`);
+                toLog += `\t${rating.Source}: ${rating.Value}\r\n`;
             }
-            console.log(`Country of Production: ${data.Country}`);
-            console.log(`Language(s): ${data.Language}`);
-            console.log(`Plot: ${data.Plot}`);
-            console.log(`Main Cast: ${data.Actors}`);
+            toLog += `Country of Production: ${data.Country}\r\n`;
+            toLog += `Language(s): ${data.Language}\r\n`;
+            toLog += `Plot: ${data.Plot}\r\n`;
+            toLog += `Main Cast: ${data.Actors}\r\n`;
+            toLog += '-----------------------------------';
+
+            liriLog(toLog);
         }
     )
 }
@@ -104,8 +107,9 @@ function do_what_it_says() {
     })
 }
 
-/* BONUS
-Log everything to both Terminal and log.txt
-Append each command
-Don't overwrite the file each time a command is run
-*/
+function liriLog(data) {
+    console.log(data);
+    fs.appendFile('log.txt', data + '\r\n', (err) => {
+        if (err) console.log(err);
+    });
+}
