@@ -11,9 +11,10 @@ Liri can take one of four commands:
 * do-what-it-says 
  
 The first three of these also require a user input immediately after the command name in quotes. 
+ 
 
 ## concert-this
-Concert-this searches for upcoming performances from an music artist/band
+Concert-this searches for upcoming performances from an music artist/band.
 
 Takes: 
 * Artist / Band name (in quotes)
@@ -26,7 +27,16 @@ Returns:
 ![concert-this example](/images/concert-this.PNG) 
  
 ## spotify-this-song 
-Spotify-this-song searches Spotify for a user's search query 
+Spotify-this-song searches Spotify for a user's search query. 
+Also note: spotify-this-song requires a spotify ID and SECRET in a .env file in the following format: 
+
+```
+# Spotify API keys
+
+SPOTIFY_ID=<Your ID Here>
+SPOTIFY_SECRET=<Your Secret Here>
+```
+An ID and Secret can be made [here](https://developer.spotify.com/my-applications/#!/applications/create) with a Free or Premium Spotify account.
  
 Takes:
 * A search query (in quotes) 
@@ -40,7 +50,7 @@ Returns:
 ![spotify-this-song example](/images/spotify-this-song.PNG)
 
 ## movie-this
-Movie-this gives the user information about a movie 
+Movie-this gives the user information about a movie. 
  
 Takes: 
 * Movie title 
